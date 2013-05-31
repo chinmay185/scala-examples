@@ -20,6 +20,10 @@ object MathWorks extends App {
 		n % 5 == 0
 	}
 
+	def between(min: Int, max: Int) = {
+		(n: Int) => (n > min && n < max)
+	}
+
 	def filterChain[T](numbers: Seq[T], fs: ((T) => (Boolean))*): Seq[T] = {
 		fs match {
 			case list if list.isEmpty => numbers
@@ -30,6 +34,7 @@ object MathWorks extends App {
 	override def main(args: Array[String]) = {
 		val numbers = Range(1, 50)
 		println("Even numbers : " + filterChain[Int](numbers, isEven))
+		println("Numbers between 3 and 15 : " + filterChain[Int](numbers, between(3, 15)))
 		println("Odd numbers : " + filterChain[Int](numbers, isOdd))
 		println("Prime numbers : " + filterChain[Int](numbers, isPrime))
 		println("Odd Prime numbers : " + filterChain[Int](numbers, isOdd, isPrime))
@@ -37,5 +42,7 @@ object MathWorks extends App {
 		println("Multiples of 3 : " + filterChain[Int](numbers, multiplesOf3))
 		println("Multiples of 5 : " + filterChain[Int](numbers, multiplesOf5))
 		println("Multiples of 3 and 5 : " + filterChain[Int](numbers, multiplesOf3, multiplesOf5))
+		println("Even Multiples of 3 and 5 between 10 and 40 : " + filterChain[Int](numbers, isEven, multiplesOf3, multiplesOf5, between(10, 40)))
+		println("Odd primes between 2 and 32 : " + filterChain[Int](numbers, isOdd, isPrime, between(2, 32)))
 	}
 }
