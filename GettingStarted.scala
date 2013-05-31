@@ -51,6 +51,8 @@ object GettingStarted {
 	  	if n % 2 != 0
 	  ) yield n
 
+	  // casting object to anther types
+		math.sqrt(n).asInstanceOf[Int] 
 
 
 	}
