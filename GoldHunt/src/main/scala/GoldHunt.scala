@@ -67,7 +67,7 @@ object GoldHunt {
   def apply(matrix: Array[Array[Cell]]) = new GoldHunt(matrix)
 }
 
-abstract class Cell
+trait Cell
 
 case object GoldCell extends Cell {
   override def toString = "Gold"
