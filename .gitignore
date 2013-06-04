@@ -2,4 +2,6 @@
 GoldHunt/.idea/*
 GoldHunt/out/*
 GoldHunt/GoldHunt.iml
-
+SamplePOCs/.idea/*
+SamplePOCs/out/*
+SamplePOCs/*.iml
