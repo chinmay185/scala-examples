@@ -5,10 +5,10 @@ import annotation.tailrec
 /*
 MGPT Problem - Hunt for Gold
 */
-class GoldHunt(m: Array[Array[Cell]]) {
+class GoldHunt(matrix: Array[Array[Cell]]) {
 
-  val maxX = m.size
-  val maxY = m(0).size
+  val maxX = matrix.size
+  val maxY = matrix(0).size
 
   @tailrec
   final def play(players: Array[Player]): Player = {
@@ -19,7 +19,7 @@ class GoldHunt(m: Array[Array[Cell]]) {
     }
     else {
       val movedPlayers: Array[Player] = players.map(p =>
-        m(p.x)(p.y) match {
+        matrix(p.x)(p.y) match {
           case disp: DisplacementCell => movePlayer(p, disp)
           case _ => p
         }
@@ -49,7 +49,7 @@ class GoldHunt(m: Array[Array[Cell]]) {
     var actuallyOver = false
     var actualWinner: Player = null
     for (p <- players) {
-      val (gameOver, winningPlayer) = m(p.x)(p.y) match {
+      val (gameOver, winningPlayer) = matrix(p.x)(p.y) match {
         case GoldCell => (true, p)
         case _ => (false, null)
       }
