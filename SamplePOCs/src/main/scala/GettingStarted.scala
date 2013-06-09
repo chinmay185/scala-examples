@@ -14,12 +14,12 @@ object GettingStarted {
 		objectCasting()
 
 		// see why this doesn't work
-		val k = List(1, 2, 3, 4, 5)
+		/*val k = List(1, 2, 3, 4, 5)
 		java.util.Arrays.deepToString(k.asInstanceOf[Array[Object]])
 		java.util.Arrays.deepToString(k)
 		val l = Array(1, 2, 3, 4, 5)
 		java.util.Arrays.deepToString(l)
-		java.util.Arrays.deepToString(l.asInstanceOf[Array[Object]])
+		java.util.Arrays.deepToString(l.asInstanceOf[Array[Object]])*/
 
 	}
 
