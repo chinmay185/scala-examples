@@ -1,7 +1,12 @@
-.class
+*.class
 GoldHunt/.idea/*
 GoldHunt/out/*
 GoldHunt/GoldHunt.iml
 SamplePOCs/.idea/*
 SamplePOCs/out/*
 SamplePOCs/*.iml
+BookItNow/target/*
+BookItNow/project/target/*
+BookItNow/**.class
+BookItNow/.idea/
+BookItNow/.idea_modules
