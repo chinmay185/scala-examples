@@ -4,25 +4,15 @@ object MathWorks extends App {
 		n > 1 && Range(2, math.sqrt(n).asInstanceOf[Int] + 1).forall(divisor => n % divisor != 0)
 	}
 
-	def isEven(n: Int) = {
-		n % 2 == 0
-	}
+	def isEven(n: Int) = n % 2 == 0
 
-	def isOdd(n: Int) = {
-		!isEven(n)
-	}
+	def isOdd(n: Int) = !isEven(n)
 
-	def multiplesOf3(n: Int) = {
-		n % 3 == 0
-	}
+	def multiplesOf3(n: Int) = n % 3 == 0
 
-	def multiplesOf5(n: Int) = {
-		n % 5 == 0
-	}
+	def multiplesOf5(n: Int) = n % 5 == 0
 
-	def between(min: Int, max: Int) = {
-		(n: Int) => (n > min && n < max)
-	}
+	def between(min: Int, max: Int) = (n: Int) => (n > min && n < max)
 
 	def filterChain[T](numbers: Seq[T], fs: ((T) => (Boolean))*): Seq[T] = {
 		fs match {
