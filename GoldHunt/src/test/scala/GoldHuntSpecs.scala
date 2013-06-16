@@ -22,11 +22,10 @@ class GoldHuntSpecs {
   @Test
   def checkIfGameIsOver() {
     // when
-    val (gameOver, winner) = goldHunt.isGameOver(players)
+    val winner = goldHunt.findWinner(players)
 
     // then
-    assert(!gameOver)
-    assert(winner == null)
+    assert(winner == None)
   }
 
   @Test

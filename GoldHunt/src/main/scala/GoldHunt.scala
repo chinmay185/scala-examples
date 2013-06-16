@@ -12,22 +12,19 @@ class GoldHunt(matrix: Array[Array[Cell]]) {
 
   @tailrec
   final def play(players: Array[Player]): Player = {
-    val (gameOver, winner) = isGameOver(players)
-    if (gameOver) {
-      println("Winner " + winner)
-      winner
-    }
-    else {
-      val movedPlayers: Array[Player] = players.map(p =>
-        matrix(p.x)(p.y) match {
-          case disp: DisplacementCell => movePlayer(p, disp)
-          case _ => p
-        }
-      )
-      play(movedPlayers)
+    findWinner(players) match {
+      case Some(winner) => winner
+      case _ => {
+        val movedPlayers: Array[Player] = players.map(p =>
+          matrix(p.x)(p.y) match {
+            case disp: DisplacementCell => movePlayer(p, disp)
+            case _ => p
+          }
+        )
+        play(movedPlayers)
+      }
     }
   }
-
 
   def movePlayer(p: Player, disp: DisplacementCell) = {
 
@@ -45,20 +42,13 @@ class GoldHunt(matrix: Array[Array[Cell]]) {
     p
   }
 
-  def isGameOver(players: Array[Player]): (Boolean, Player) = {
-    var actuallyOver = false
-    var actualWinner: Player = null
-    for (p <- players) {
-      val (gameOver, winningPlayer) = matrix(p.x)(p.y) match {
-        case GoldCell => (true, p)
-        case _ => (false, null)
+  def findWinner(players: Array[Player]): Option[Player] = {
+    players.find(p =>
+      matrix(p.x)(p.y) match {
+        case GoldCell => true
+        case _ => false
       }
-      if (gameOver) {
-        actuallyOver = true
-        actualWinner = winningPlayer
-      }
-    }
-    (actuallyOver, actualWinner)
+    )
   }
 
 }
