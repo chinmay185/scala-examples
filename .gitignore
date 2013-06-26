@@ -1,4 +1,7 @@
 *.class
+.idea/
+ComplexNumbers.iml
+ComplexNumbers/target/*
 GoldHunt/.idea/*
 GoldHunt/out/*
 GoldHunt/GoldHunt.iml
