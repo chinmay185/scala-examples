@@ -106,7 +106,7 @@ class GoldHuntSpecs {
   }
 
   def createMatrix1() = {
-    val m = new Array[Array[Cell]](5)
+    val m = Array.ofDim[Cell](5, 4) //new Array[Array[Cell]](5)
     m(0) = Array(DisplacementCell(2, 0), DisplacementCell(0, 2), TrapCell, DisplacementCell(3, 0))
     m(1) = Array(TrapCell, DisplacementCell(6, 0), DisplacementCell(0, 3), DisplacementCell(2, 0))
     m(2) = Array(DisplacementCell(0, -1), DisplacementCell(1, 0), GoldCell, DisplacementCell(0, -1))
@@ -120,7 +120,7 @@ class GoldHuntSpecs {
   }
 
   def createMatrix2() = {
-    val m = new Array[Array[Cell]](1)
+    val m = Array.ofDim[Cell](1, 2) //new Array[Array[Cell]](1)
     m(0) = Array(GoldCell, TrapCell)
     m
   }
@@ -130,7 +130,7 @@ class GoldHuntSpecs {
   }
 
   def createMatrix3() = {
-    val m = new Array[Array[Cell]](8)
+    val m = Array.ofDim[Cell](8, 2) //new Array[Array[Cell]](8)
     m(0) = Array(GoldCell, DisplacementCell(-1, 5))
     m(1) = Array(DisplacementCell(0, 2), TrapCell)
     m(2) = Array(TrapCell, DisplacementCell(8, 0))

@@ -1,16 +1,14 @@
 object MathWorks extends App {
 	
-	def isPrime(n: Int) = {
-		n > 1 && Range(2, math.sqrt(n).asInstanceOf[Int] + 1).forall(divisor => n % divisor != 0)
-	}
+	def isPrime(n: Int) = n > 1 && Range(2, math.sqrt(n).asInstanceOf[Int] + 1).forall(divisor => n % divisor != 0)
 
 	def isEven(n: Int) = n % 2 == 0
 
 	def isOdd(n: Int) = !isEven(n)
 
-	def multiplesOf3(n: Int) = n % 3 == 0
+	def isMultipleOf3(n: Int) = n % 3 == 0
 
-	def multiplesOf5(n: Int) = n % 5 == 0
+	def isMultipleOf5(n: Int) = n % 5 == 0
 
 	def between(min: Int, max: Int) = (n: Int) => (n > min && n < max)
 
@@ -29,10 +27,10 @@ object MathWorks extends App {
 		println("Prime numbers : " + filterChain[Int](numbers, isPrime))
 		println("Odd Prime numbers : " + filterChain[Int](numbers, isOdd, isPrime))
 		println("Even Prime numbers : " + filterChain[Int](numbers, isEven, isPrime))
-		println("Multiples of 3 : " + filterChain[Int](numbers, multiplesOf3))
-		println("Multiples of 5 : " + filterChain[Int](numbers, multiplesOf5))
-		println("Multiples of 3 and 5 : " + filterChain[Int](numbers, multiplesOf3, multiplesOf5))
-		println("Even Multiples of 3 and 5 between 10 and 40 : " + filterChain[Int](numbers, isEven, multiplesOf3, multiplesOf5, between(10, 40)))
+		println("Multiples of 3 : " + filterChain[Int](numbers, isMultipleOf3))
+		println("Multiples of 5 : " + filterChain[Int](numbers, isMultipleOf5))
+		println("Multiples of 3 and 5 : " + filterChain[Int](numbers, isMultipleOf3, isMultipleOf5))
+		println("Even Multiples of 3 and 5 between 10 and 40 : " + filterChain[Int](numbers, isEven, isMultipleOf3, isMultipleOf5, between(10, 40)))
 		println("Odd primes between 2 and 32 : " + filterChain[Int](numbers, isOdd, isPrime, between(2, 32)))
 	}
 }
