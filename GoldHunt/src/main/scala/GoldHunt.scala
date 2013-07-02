@@ -30,16 +30,20 @@ class GoldHunt(matrix: Array[Array[Cell]]) {
 
     def moveTo(cellDisplacementValue: Int, playerPosition: Int, bound: Int) = {
       val toMoveBy = math.abs(cellDisplacementValue) % bound
-      var moveTo = (if (cellDisplacementValue > 0) playerPosition + toMoveBy else if (cellDisplacementValue < 0) playerPosition - toMoveBy else playerPosition) % bound
-      if (moveTo < 0)
-        moveTo = moveTo + bound
-      moveTo
+      val moveToAbsolute = cellDisplacementValue match {
+        case v if (v > 0) => playerPosition + toMoveBy
+        case v if (v < 0) => playerPosition - toMoveBy
+        case _ => playerPosition
+      }
+      val moveTo = moveToAbsolute % bound
+
+      moveTo match {
+        case newPosition if newPosition < 0 => moveTo + bound
+        case _ => moveTo
+      }
     }
 
-    p.x = moveTo(disp.dx, p.x, maxX)
-    p.y = moveTo(disp.dy, p.y, maxY)
-
-    p
+    Player(p.id, moveTo(disp.dx, p.x, maxX), moveTo(disp.dy, p.y, maxY))
   }
 
   def findWinner(players: Array[Player]): Option[Player] = {
@@ -71,11 +75,6 @@ case class DisplacementCell(dx: Int, dy: Int) extends Cell {
   override def toString = "Disp"
 }
 
-class Player(val id: Int, var x: Int, var y: Int) {
+case class Player(id: Int, x: Int, y: Int) {
   override def toString = "Player " + id + " is at (" + x + "," + y + ")"
 }
-
-object Player {
-  def apply(id: Int, x: Int, y: Int) = new Player(id, x, y)
-}
-
