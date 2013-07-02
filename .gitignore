@@ -1,6 +1,7 @@
 *.class
 .idea/
-ComplexNumbers.iml
+*.iml
+DropAndGather.iml
 ComplexNumbers/target/*
 GoldHunt/.idea/*
 GoldHunt/out/*
