@@ -19,7 +19,7 @@ class DropAndGather(val matrix: Array[Array[Int]], target: Position) {
     @tailrec
     def solve0(timer: Int, insects: List[Insect]): Int = {
 
-//      printMatrix(matrix)
+      //      printMatrix(matrix)
 
       if (timer == 0)
         matrix(target.x)(target.y)
@@ -39,8 +39,9 @@ class DropAndGather(val matrix: Array[Array[Int]], target: Position) {
     def moved = droppersFirstList.map(insect =>
       insect.move(matrix))
 
+    val insectsStillInMatrix = moved.filter(insect => insect.canMoveInMatrix)
 
-    solve0(timer, moved)
+    solve0(timer, insectsStillInMatrix)
   }
 
 }
@@ -60,6 +61,8 @@ abstract class Insect(private val directions: String) {
   val sequence = new Circular[Position](nextPositions.toList)
 
   def move(matrix: Array[Array[Int]]): Insect
+
+  def canMoveInMatrix: Boolean
 }
 
 case class Dropper(var p: Position, directions: String) extends Insect(directions) {
@@ -72,10 +75,10 @@ case class Dropper(var p: Position, directions: String) extends Insect(direction
       val moveByPosition = sequence.next()
       p = new Position(p.x + moveByPosition.x, p.y + moveByPosition.y)
     }
-    this
+    new Dropper(p, directions.substring(1, directions.length).concat(directions.substring(0, 1)))
   }
 
-  def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
+  override def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
 }
 
 case class Gatherer(var p: Position, directions: String) extends Insect(directions) {
@@ -88,10 +91,10 @@ case class Gatherer(var p: Position, directions: String) extends Insect(directio
       val moveByPosition = sequence.next()
       p = new Position(p.x + moveByPosition.x, p.y + moveByPosition.y)
     }
-    this
+    new Gatherer(p, directions.substring(1, directions.length).concat(directions.substring(0, 1)))
   }
 
-  def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
+  override def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
 }
 
 class Circular[A](list: List[A]) extends Iterator[A] {
