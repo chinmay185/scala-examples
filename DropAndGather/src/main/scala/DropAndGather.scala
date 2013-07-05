@@ -19,8 +19,6 @@ class DropAndGather(val matrix: Array[Array[Int]], target: Position) {
     @tailrec
     def solve0(timer: Int, insects: List[Insect]): Int = {
 
-      //      printMatrix(matrix)
-
       if (timer == 0)
         matrix(target.x)(target.y)
       else {
@@ -39,7 +37,7 @@ class DropAndGather(val matrix: Array[Array[Int]], target: Position) {
     def moved = droppersFirstList.map(insect =>
       insect.move(matrix))
 
-    val insectsStillInMatrix = moved.filter(insect => insect.canMoveInMatrix)
+    val insectsStillInMatrix = moved.filter(insect => insect.hasNextMove)
 
     solve0(timer, insectsStillInMatrix)
   }
@@ -62,7 +60,7 @@ abstract class Insect(private val directions: String) {
 
   def move(matrix: Array[Array[Int]]): Insect
 
-  def canMoveInMatrix: Boolean
+  def hasNextMove: Boolean
 }
 
 case class Dropper(var p: Position, directions: String) extends Insect(directions) {
@@ -70,7 +68,7 @@ case class Dropper(var p: Position, directions: String) extends Insect(direction
 
   def move(matrix: Array[Array[Int]]): Dropper = {
 
-    if (canMoveInMatrix) {
+    if (hasNextMove) {
       matrix(p.x)(p.y) += 1
       val moveByPosition = sequence.next()
       p = new Position(p.x + moveByPosition.x, p.y + moveByPosition.y)
@@ -78,14 +76,14 @@ case class Dropper(var p: Position, directions: String) extends Insect(direction
     new Dropper(p, directions.substring(1, directions.length).concat(directions.substring(0, 1)))
   }
 
-  override def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
+  override def hasNextMove = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
 }
 
 case class Gatherer(var p: Position, directions: String) extends Insect(directions) {
   override def toString = "G" + p
 
   def move(matrix: Array[Array[Int]]): Gatherer = {
-    if (canMoveInMatrix) {
+    if (hasNextMove) {
       if (matrix(p.x)(p.y) > 0)
         matrix(p.x)(p.y) -= 1
       val moveByPosition = sequence.next()
@@ -94,7 +92,7 @@ case class Gatherer(var p: Position, directions: String) extends Insect(directio
     new Gatherer(p, directions.substring(1, directions.length).concat(directions.substring(0, 1)))
   }
 
-  override def canMoveInMatrix = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
+  override def hasNextMove = (p.x >= 0 && p.x < 10) && (p.y >= 0 && p.y < 10)
 }
 
 class Circular[A](list: List[A]) extends Iterator[A] {
