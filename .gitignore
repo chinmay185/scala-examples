@@ -1,6 +1,7 @@
 *.class
 .idea/
 *.iml
+*/lib/*.jar
 DropAndGather.iml
 ComplexNumbers/target/*
 GoldHunt/.idea/*
