@@ -14,13 +14,16 @@ class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
     for (x <- 0 until matrix.gridSize) {
       for (y <- 0 until matrix.gridSize) {
         val currentCell = matrix.heatData(x)(y)
+
+        // find all adjacent cells to current cell
         val adjacentCells = List[Option[Cell]](Some(currentCell), matrix.north(currentCell), matrix.northEast(currentCell),
           matrix.east(currentCell), matrix.southEast(currentCell), matrix.south(currentCell),
           matrix.southWest(currentCell), matrix.west(currentCell), matrix.northWest(currentCell))
 
+        // calculate adjacent solar activity score for current cell based on its adjacent cells
         val adjacentSolarActivities = adjacentCells.map(cell =>
           cell match {
-            case Some(c) => c.v
+            case Some(c) => c.score
             case _ => 0
           })
         heatScores(x)(y) = Cell(x, y, adjacentSolarActivities.sum)
@@ -39,11 +42,11 @@ class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
     }
   }
 
+  def calculateSolarActivityScore() =
+    calculateSolarActivity().toList.flatten.map(cell => cell.score)
+
   def calculateRelevantSolarActivityScore(t: Int) =
     calculateSolarActivity().toList.flatten.sorted.take(t)
-
-  def calculateSolarActivityScore() =
-    calculateSolarActivity().toList.flatten.map(cell => cell.v)
 
 }
 
@@ -109,8 +112,8 @@ case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
 
 }
 
-case class Cell(x: Int, y: Int, v: Int) extends Ordered[Cell] {
+case class Cell(x: Int, y: Int, score: Int) extends Ordered[Cell] {
   def compare(that: Cell): Int = {
-    that.v compareTo v
+    that.score compareTo score // for sorting by decreasing value of solar activity score
   }
 }
