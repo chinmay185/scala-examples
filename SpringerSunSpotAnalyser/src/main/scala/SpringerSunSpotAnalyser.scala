@@ -1,96 +1,116 @@
-object SpringerSunSpotAnalyser {
+class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
 
-  private def calculateSolarActivity(m: Matrix) = {
-    val heatScores = Array.ofDim[Int](m.gridSize, m.gridSize)
+  private val cells = Array.ofDim[Cell](gridSize, gridSize)
+  for (x <- 0 until gridSize) {
+    for (y <- 0 until gridSize) {
+      cells(x)(y) = Cell(x, y, input(x)(y))
+    }
+  }
+  val matrix = Matrix(cells, gridSize)
 
-    for (x <- 0 until m.gridSize) {
-      for (y <- 0 until m.gridSize) {
-        val adjacentScores = List[Option[Int]](Some(m.heatData(x)(y)), m.north(x, y), m.northEast(x, y), m.east(x, y),
-          m.southEast(x, y), m.south(x, y), m.southWest(x, y), m.west(x, y), m.northWest(x, y))
-        heatScores(x)(y) = adjacentScores.foldLeft(0) {
-          (acc, e) =>
-            val v = e match {
-              case Some(value) => value
-              case None => 0
-            }
-            acc + v
-        }
+  private def calculateSolarActivity() = {
+    val heatScores = Array.ofDim[Cell](matrix.gridSize, matrix.gridSize)
+
+    for (x <- 0 until matrix.gridSize) {
+      for (y <- 0 until matrix.gridSize) {
+        val currentCell = matrix.heatData(x)(y)
+        val adjacentCells = List[Option[Cell]](Some(currentCell), matrix.north(currentCell), matrix.northEast(currentCell),
+          matrix.east(currentCell), matrix.southEast(currentCell), matrix.south(currentCell),
+          matrix.southWest(currentCell), matrix.west(currentCell), matrix.northWest(currentCell))
+
+        val adjacentSolarActivities = adjacentCells.map(cell =>
+          cell match {
+            case Some(c) => c.v
+            case _ => 0
+          })
+        heatScores(x)(y) = Cell(x, y, adjacentSolarActivities.sum)
       }
     }
+    printMatrix(heatScores)
     heatScores
   }
 
-  def calculateSolarActivityScore(m: Matrix) = {
-    calculateSolarActivity(m).toList.flatten
+  def printMatrix(heatScores: Array[Array[Cell]]) {
+    for (x <- 0 until matrix.gridSize) {
+      for (y <- 0 until matrix.gridSize) {
+        print(heatScores(x)(y) + " ")
+      }
+      println()
+    }
   }
 
-  /*def calculateRelevantSolarActivityScore(m: Matrix, t: Int) = {
-    calculateSolarActivity(m)
-  }*/
-}
+  def calculateRelevantSolarActivityScore(t: Int) =
+    calculateSolarActivity().toList.flatten.sorted.take(t)
 
-case class Matrix(heatData: Array[Array[Int]], gridSize: Int) {
-
-  def outsideBounds(x: Int, y: Int): Boolean = {
-    x < 0 || x >= gridSize || y < 0 || y >= gridSize
-  }
-
-  def north(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x - 1, y))
-      Some(heatData(x - 1)(y))
-    else
-      None
-  }
-
-  def northEast(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x - 1, y + 1))
-      Some(heatData(x - 1)(y + 1))
-    else
-      None
-  }
-
-  def east(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x, y + 1))
-      Some(heatData(x)(y + 1))
-    else
-      None
-  }
-
-  def southEast(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x + 1, y + 1))
-      Some(heatData(x + 1)(y + 1))
-    else
-      None
-  }
-
-  def south(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x + 1, y))
-      Some(heatData(x + 1)(y))
-    else
-      None
-  }
-
-  def southWest(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x + 1, y - 1))
-      Some(heatData(x + 1)(y - 1))
-    else
-      None
-  }
-
-  def west(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x, y - 1))
-      Some(heatData(x)(y - 1))
-    else
-      None
-  }
-
-  def northWest(x: Int, y: Int): Option[Int] = {
-    if (!outsideBounds(x - 1, y - 1))
-      Some(heatData(x - 1)(y - 1))
-    else
-      None
-  }
+  def calculateSolarActivityScore() =
+    calculateSolarActivity().toList.flatten.map(cell => cell.v)
 
 }
 
-class Cell(val x: Int, val y: Int, val v: Int)
+case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
+
+  def outsideBounds(x: Int, y: Int) = x < 0 || x >= gridSize || y < 0 || y >= gridSize
+
+  def north(cell: Cell) = {
+    if (!outsideBounds(cell.x - 1, cell.y))
+      Some(heatData(cell.x - 1)(cell.y))
+    else
+      None
+  }
+
+  def northEast(cell: Cell) = {
+    if (!outsideBounds(cell.x - 1, cell.y + 1))
+      Some(heatData(cell.x - 1)(cell.y + 1))
+    else
+      None
+  }
+
+  def east(cell: Cell) = {
+    if (!outsideBounds(cell.x, cell.y + 1))
+      Some(heatData(cell.x)(cell.y + 1))
+    else
+      None
+  }
+
+  def southEast(cell: Cell) = {
+    if (!outsideBounds(cell.x + 1, cell.y + 1))
+      Some(heatData(cell.x + 1)(cell.y + 1))
+    else
+      None
+  }
+
+  def south(cell: Cell) = {
+    if (!outsideBounds(cell.x + 1, cell.y))
+      Some(heatData(cell.x + 1)(cell.y))
+    else
+      None
+  }
+
+  def southWest(cell: Cell) = {
+    if (!outsideBounds(cell.x + 1, cell.y - 1))
+      Some(heatData(cell.x + 1)(cell.y - 1))
+    else
+      None
+  }
+
+  def west(cell: Cell) = {
+    if (!outsideBounds(cell.x, cell.y - 1))
+      Some(heatData(cell.x)(cell.y - 1))
+    else
+      None
+  }
+
+  def northWest(cell: Cell) = {
+    if (!outsideBounds(cell.x - 1, cell.y - 1))
+      Some(heatData(cell.x - 1)(cell.y - 1))
+    else
+      None
+  }
+
+}
+
+case class Cell(x: Int, y: Int, v: Int) extends Ordered[Cell] {
+  def compare(that: Cell): Int = {
+    that.v compareTo v
+  }
+}
