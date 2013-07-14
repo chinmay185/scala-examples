@@ -34,11 +34,11 @@ class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
   }
 
   def printMatrix(heatScores: Array[Array[Cell]]) {
-    for (x <- 0 until matrix.gridSize) {
-      for (y <- 0 until matrix.gridSize) {
-        print(heatScores(x)(y) + " ")
-      }
-      println()
+    heatScores.foreach {
+      row =>
+        row.foreach(cell =>
+          print(cell + " "))
+        println()
     }
   }
 
@@ -113,7 +113,5 @@ case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
 }
 
 case class Cell(x: Int, y: Int, score: Int) extends Ordered[Cell] {
-  def compare(that: Cell): Int = {
-    that.score compareTo score // for sorting by decreasing value of solar activity score
-  }
+  def compare(that: Cell): Int = that.score compareTo score // for sorting by decreasing value of solar activity score
 }
