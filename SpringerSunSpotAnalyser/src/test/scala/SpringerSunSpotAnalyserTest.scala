@@ -2,6 +2,7 @@ import org.junit.{Assert, Test}
 
 class SpringerSunSpotAnalyserTest {
 
+  // problem 1
   @Test
   def itCalculatesSolarActivityScoreForGridOne() {
     // given
@@ -23,6 +24,7 @@ class SpringerSunSpotAnalyserTest {
     Assert.assertEquals(expectedScore, actualScore)
   }
 
+  // problem 2
   @Test
   def itCalculatesSolarActivityScoreForGridTwo() {
     // given
@@ -43,6 +45,7 @@ class SpringerSunSpotAnalyserTest {
     Assert.assertEquals(expectedScore, actualScore)
   }
 
+  // problem 3 - test case 1
   @Test
   def itCalculatesRelevantSolarActivityScoreForGridOne() {
     // given
@@ -66,6 +69,7 @@ class SpringerSunSpotAnalyserTest {
     Assert.assertEquals(expectedScore, actualScore)
   }
 
+  // problem 3 - test case 2
   @Test
   def itCalculatesRelevantSolarActivityScoreForGridTwo() {
     // given
