@@ -1,9 +1,10 @@
 class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
 
+  // constructor
   private val cells = Array.ofDim[Cell](gridSize, gridSize)
-  for (x <- 0 until gridSize) {
-    for (y <- 0 until gridSize) {
-      cells(x)(y) = Cell(x, y, input(x)(y))
+  for (row <- 0 until gridSize) {
+    for (col <- 0 until gridSize) {
+      cells(col)(row) = Cell(col, row, input(col)(row))
     }
   }
   val matrix = Matrix(cells, gridSize)
@@ -11,9 +12,9 @@ class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
   private def calculateSolarActivity() = {
     val heatScores = Array.ofDim[Cell](matrix.gridSize, matrix.gridSize)
 
-    for (x <- 0 until matrix.gridSize) {
-      for (y <- 0 until matrix.gridSize) {
-        val currentCell = matrix.heatData(x)(y)
+    for (row <- 0 until matrix.gridSize) {
+      for (col <- 0 until matrix.gridSize) {
+        val currentCell = matrix.heatData(col)(row)
 
         // find all adjacent cells to current cell
         val adjacentCells = List[Option[Cell]](Some(currentCell), matrix.north(currentCell), matrix.northEast(currentCell),
@@ -26,10 +27,10 @@ class SpringerSunSpotAnalyser(input: Array[Array[Int]], gridSize: Int) {
             case Some(c) => c.score
             case _ => 0
           })
-        heatScores(x)(y) = Cell(x, y, adjacentSolarActivities.sum)
+        heatScores(col)(row) = Cell(row, col, adjacentSolarActivities.sum)
       }
     }
-    printMatrix(heatScores)
+    //printMatrix(heatScores)
     heatScores
   }
 
@@ -55,22 +56,22 @@ case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
   def outsideBounds(x: Int, y: Int) = x < 0 || x >= gridSize || y < 0 || y >= gridSize
 
   def north(cell: Cell) = {
-    if (!outsideBounds(cell.x - 1, cell.y))
-      Some(heatData(cell.x - 1)(cell.y))
+    if (!outsideBounds(cell.x, cell.y - 1))
+      Some(heatData(cell.x)(cell.y - 1))
     else
       None
   }
 
   def northEast(cell: Cell) = {
-    if (!outsideBounds(cell.x - 1, cell.y + 1))
-      Some(heatData(cell.x - 1)(cell.y + 1))
+    if (!outsideBounds(cell.x + 1, cell.y - 1))
+      Some(heatData(cell.x + 1)(cell.y - 1))
     else
       None
   }
 
   def east(cell: Cell) = {
-    if (!outsideBounds(cell.x, cell.y + 1))
-      Some(heatData(cell.x)(cell.y + 1))
+    if (!outsideBounds(cell.x + 1, cell.y))
+      Some(heatData(cell.x + 1)(cell.y))
     else
       None
   }
@@ -83,22 +84,22 @@ case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
   }
 
   def south(cell: Cell) = {
-    if (!outsideBounds(cell.x + 1, cell.y))
-      Some(heatData(cell.x + 1)(cell.y))
+    if (!outsideBounds(cell.x, cell.y + 1))
+      Some(heatData(cell.x)(cell.y + 1))
     else
       None
   }
 
   def southWest(cell: Cell) = {
-    if (!outsideBounds(cell.x + 1, cell.y - 1))
-      Some(heatData(cell.x + 1)(cell.y - 1))
+    if (!outsideBounds(cell.x - 1, cell.y + 1))
+      Some(heatData(cell.x - 1)(cell.y + 1))
     else
       None
   }
 
   def west(cell: Cell) = {
-    if (!outsideBounds(cell.x, cell.y - 1))
-      Some(heatData(cell.x)(cell.y - 1))
+    if (!outsideBounds(cell.x - 1, cell.y))
+      Some(heatData(cell.x - 1)(cell.y))
     else
       None
   }
@@ -113,5 +114,10 @@ case class Matrix(heatData: Array[Array[Cell]], gridSize: Int) {
 }
 
 case class Cell(x: Int, y: Int, score: Int) extends Ordered[Cell] {
-  def compare(that: Cell): Int = that.score compareTo score // for sorting by decreasing value of solar activity score
+
+  // for sorting by decreasing value of solar activity score
+  def compare(that: Cell): Int = that.score compareTo score
+
+  override def toString = "Cell(x:" + x + ", y:" + y + ", score:" + score + ")"
+
 }
